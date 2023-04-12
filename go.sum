@@ -1,0 +1,3 @@
+git.apache.org/thrift.git v0.18.1 h1:YKqICyjvG2vbPF3zSd3GVUPJl9WeOgh9rYrykKDeZhs=
+git.apache.org/thrift.git v0.18.1/go.mod h1:rdQn/dCcDKEWjjylUeueum4vQEjG2v8v2PqriUnbr+I=
+github.com/apache/thrift v0.18.1/go.mod h1:rdQn/dCcDKEWjjylUeueum4vQEjG2v8v2PqriUnbr+I=
