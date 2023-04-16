@@ -1,13 +1,11 @@
 package main
 
 import (
-	"crypto/tls"
+	"context"
 	"flag"
 	"fmt"
-	"github.com/shuyi-tangerine/little_book_book/gen-go/tangerine/little_book_book"
+	"github.com/shuyi-tangerine/little_book_book/thrift"
 	"os"
-
-	"github.com/apache/thrift/lib/go/thrift"
 )
 
 func Usage() {
@@ -26,49 +24,9 @@ func main() {
 	secure := flag.Bool("secure", false, "Use tls secure transport")
 
 	flag.Parse()
-
-	var protocolFactory thrift.TProtocolFactory
-	switch *protocol {
-	case "compact":
-		protocolFactory = thrift.NewTCompactProtocolFactoryConf(nil)
-	case "simplejson":
-		protocolFactory = thrift.NewTSimpleJSONProtocolFactoryConf(nil)
-	case "json":
-		protocolFactory = thrift.NewTJSONProtocolFactory()
-	case "binary", "":
-		protocolFactory = thrift.NewTBinaryProtocolFactoryConf(nil)
-	default:
-		fmt.Fprint(os.Stderr, "Invalid protocol specified", protocol, "\n")
-		Usage()
-		os.Exit(1)
-	}
-
-	var transportFactory thrift.TTransportFactory
-	cfg := &thrift.TConfiguration{
-		TLSConfig: &tls.Config{
-			InsecureSkipVerify: true,
-		},
-	}
-
-	if *buffered {
-		transportFactory = thrift.NewTBufferedTransportFactory(8192)
-	} else {
-		transportFactory = thrift.NewTTransportFactory()
-	}
-
-	if *framed {
-		transportFactory = thrift.NewTFramedTransportFactoryConf(transportFactory, cfg)
-	}
-
-	if *server {
-		handler := NewLittleBookBooker()
-		processor := little_book_book.NewLittleBookBookerProcessor(handler)
-		if err := runServer(transportFactory, protocolFactory, *addr, *secure, processor); err != nil {
-			fmt.Println("error running server:", err)
-		}
-	} else {
-		if err := runClient(transportFactory, protocolFactory, *addr, *secure, cfg); err != nil {
-			fmt.Println("error running client:", err)
-		}
+	thriftServer := thrift.NewServer(*server, *protocol, *buffered, *framed, *addr, *secure)
+	err := thriftServer.Start(context.Background())
+	if err != nil {
+		fmt.Println("start error", err)
 	}
 }
