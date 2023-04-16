@@ -10,11 +10,15 @@ import (
 )
 
 type Server struct {
-	addr []string // 启动ip:port，空则默认是 localhost:8080
+	addr string // 启动ip:port，空则默认是 localhost:8080
+	c    chan error
 }
 
-func NewServer(addr ...string) top.Server {
-	return &Server{addr: addr}
+func NewServer(addr string) top.Server {
+	return &Server{
+		addr: addr,
+		c:    make(chan error),
+	}
 }
 
 func (m *Server) IsBlock(ctx context.Context) (isBlock bool) {
@@ -28,7 +32,7 @@ func (m *Server) Start(ctx context.Context) (err error) {
 			"message": "pong",
 		})
 	})
-	return r.Run(m.addr...)
+	return r.Run(m.addr)
 }
 
 func (m *Server) AsyncStart(ctx context.Context) {
@@ -36,7 +40,11 @@ func (m *Server) AsyncStart(ctx context.Context) {
 		err := m.Start(ctx)
 		if err != nil {
 			fmt.Println("[AsyncStart] Start panic", err)
-			panic(err)
+			m.c <- err
 		}
 	}()
+}
+
+func (m *Server) ErrorC() (c chan error) {
+	return m.c
 }

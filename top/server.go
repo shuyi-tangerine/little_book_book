@@ -9,4 +9,6 @@ type Server interface {
 	Start(ctx context.Context) (err error)
 	// AsyncStart 异步启动
 	AsyncStart(ctx context.Context)
+	// ErrorC 异步启动情况下，用 channel 返回启动结果（error）
+	ErrorC() (c chan error)
 }

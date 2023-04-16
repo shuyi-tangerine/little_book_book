@@ -19,6 +19,7 @@ type Server struct {
 	isFramed   bool
 	addr       string
 	useSecure  bool
+	c          chan error
 }
 
 func NewServer(isServer bool, protocol string, isBuffered bool, isFramed bool, addr string, useSecure bool) top.Server {
@@ -29,6 +30,7 @@ func NewServer(isServer bool, protocol string, isBuffered bool, isFramed bool, a
 		isFramed:   isFramed,
 		addr:       addr,
 		useSecure:  useSecure,
+		c:          make(chan error),
 	}
 }
 
@@ -85,7 +87,11 @@ func (m *Server) AsyncStart(ctx context.Context) {
 		err := m.Start(ctx)
 		if err != nil {
 			fmt.Println("[AsyncStart] Start panic", err)
-			panic(err)
+			m.c <- err
 		}
 	}()
+}
+
+func (m *Server) ErrorC() (c chan error) {
+	return m.c
 }
