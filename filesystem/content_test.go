@@ -9,7 +9,7 @@ import (
 
 func TestContentService_Save(t *testing.T) {
 	service := NewContentService("/tmp")
-	err := service.Save(context.Background(), &top.Content{Text: "你好才是真的好\n广州好滴   \n  "})
+	err := service.Save(context.Background(), &top.ContentPO{Text: "你好才是真的好\n广州好滴   \n  "})
 	fmt.Println(err)
 }
 

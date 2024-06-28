@@ -23,7 +23,7 @@ func NewLittleBookBooker() little_book_book.LittleBookBooker {
 func (m *LittleBookBooker) SaveContent(ctx context.Context, req *little_book_book.SaveContentRequest) (resp *little_book_book.SaveContentResponse, err error) {
 	resp = little_book_book.NewSaveContentResponse()
 	resp.Base = base.NewRPCResponse()
-	err = m.contentService.Save(ctx, &top.Content{Text: req.Text})
+	err = m.contentService.Save(ctx, &top.ContentPO{Text: req.Text})
 	if err != nil {
 		resp.Base.Code = -1
 		resp.Base.Message = fmt.Sprintf("%v", err)

@@ -25,7 +25,7 @@ func NewContentServiceWithDefaultBookDir() top.ContentService {
 	return NewContentService(bookDir)
 }
 
-func (m *ContentService) Save(ctx context.Context, req *top.Content) (err error) {
+func (m *ContentService) Save(ctx context.Context, req *top.ContentPO) (err error) {
 	// 指定目录创建文件
 
 	// 打开文件
@@ -49,12 +49,12 @@ func (m *ContentService) bookPath() string {
 	return fmt.Sprintf("%s/book_content.txt", m.bookDir)
 }
 
-func (m *ContentService) Get(ctx context.Context) (content *top.Content, err error) {
+func (m *ContentService) Get(ctx context.Context) (content *top.ContentPO, err error) {
 	bts, err := os.ReadFile(m.bookPath())
 	if err != nil {
 		return
 	}
 
-	content = &top.Content{Text: string(bts)}
+	content = &top.ContentPO{Text: string(bts)}
 	return
 }

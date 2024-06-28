@@ -6,9 +6,14 @@ replace git.apache.org/thrift.git v0.18.1 => github.com/apache/thrift v0.18.1
 
 replace github.com/apache/thrift v0.18.1 => git.apache.org/thrift.git v0.18.1
 
-require github.com/apache/thrift v0.18.1
+require (
+	github.com/apache/thrift v0.18.1
+	github.com/go-sql-driver/mysql v1.8.1
+	github.com/jmoiron/sqlx v1.4.0
+)
 
 require (
+	filippo.io/edwards25519 v1.1.0 // indirect
 	git.apache.org/thrift.git v0.18.1 // indirect
 	github.com/bytedance/sonic v1.8.7 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20221115062448-fe3a3abad311 // indirect

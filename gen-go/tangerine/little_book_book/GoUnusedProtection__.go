@@ -2,4 +2,5 @@
 
 package little_book_book
 
-var GoUnusedProtection__ int
+var GoUnusedProtection__ int;
+
